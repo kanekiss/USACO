@@ -1,0 +1,154 @@
+// ﻿#pragma GCC optimize("sse,sse2,sse3,ssse3,sse4,sse4.1,sse4.2,abm,mmx,avx,avx2,popcnt,tune=native")
+// #define _CRT_SECURE_NO_WARNINGS
+//#include <chrono>
+#include <set>
+#include <map>
+#include <deque>
+#include <string>
+#include <cstdint>
+#include <cmath>
+#include <queue>
+#include <cassert>
+#include <random>
+#include <bitset>
+#include <iomanip>
+#include <numeric>
+#include <time.h>//////////////
+#include <ctime>
+#include <climits>
+#include <string>
+#include <cstdio>
+#include <vector>
+#include <cstdlib>
+#include <iostream>
+#include <algorithm>
+#include <unordered_map>
+#include <chrono>
+#include <unordered_set>
+//++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++
+//#define endl '\n'
+#define mp make_pair
+#define pbc push_back
+#define pob pop_back()
+#define empb emplace_back
+#define queuel queue<long long>
+#define sqr(a) ((a) * (a))
+#define lsqr(a) (ld(a) * a)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define pin(p) cin >> p.first >> p.second;
+#define uniq(a) sort(all(a));(a).resize(unique(all(a)) - a.begin());
+#define rev(v) reverse(v.begin(), v.end());
+#define sout(s, c) for (auto i : s) cout << i << c;
+#define pout(p) cout << p.first << " " << p.second;
+#define er(v, l, r) erase(v.begin() + l, v.begin() + r);
+#define vin(v) for (ll i = 0; i < v.size(); ++i) cin >> v[i];
+#define vout(v, c) for (int i = 0; i < v.size(); ++i) cout << v[i] << c;
+#define pushi(v, a) for (int i = 0; i < a.size(); ++i) v.push_back(a[i]);
+#define fastio() ios_base::sync_with_stdio(0); cout.tie(0); cin.tie(0); srand(time(NULL))
+#define dab(v) for(auto i:v)cout<<i<<' ';
+#define sp system("pause")
+#define left left228
+#define type type1337
+#define right right228
+//++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++
+using namespace std;
+//++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++
+typedef long long ll;
+typedef long double ld;
+typedef unsigned long long ull;
+//++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++
+const ld EPS = 1e-5;
+const ld EPS2 = 1e-12;
+const ld PI = acos(-1);
+int mod = (int)998244353;
+const int MOD7 = 1000000007;
+const int MOD9 = 1000000009;
+const int a228 = 18;
+const ll INF = 1e18;
+const int inf = 1e9;
+mt19937 rnd(std::chrono::steady_clock::now().time_since_epoch().count());
+const ll kekmod = 1791791791;
+const ll bestmod = 1148822869;
+const int MAXN = 1e5 + 2;
+#define int ll
+string a[MAXN];
+vector<int> g[MAXN];
+bool leave[MAXN];
+ll  ansfs = 0;
+vector<ll> d(MAXN);
+int sz[MAXN];
+int lsa = 0;
+void dfssz(int v, int p)
+{
+	sz[v] = (leave[v]);
+	for (int i : g[v])
+	{
+		if (i != p)
+		{
+			dfssz(i, v);
+			sz[v] += sz[i];
+		}
+	}
+}
+int n;
+void dfsord(int v, int p, int nans)
+{
+	ansfs = min(ansfs, nans);
+	for (int i : g[v])
+	{
+		if (i != p)
+		{
+			int tx = nans;
+			tx -= sz[i] * a[i].size();
+			tx += (lsa -sz[i]) * 3;
+			dfsord(i, v, tx);
+		}
+	}
+}
+signed main()
+{
+	fastio();
+	freopen("dirtraverse.in", "r", stdin);
+	freopen("dirtraverse.out", "w", stdout);
+	d.assign(MAXN, INF);
+	cin >> n;
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> a[i];
+		int x;
+		cin >> x;
+		if (!x)
+		{
+			++lsa;
+			leave[i] = 1;
+		}
+		else
+		{
+			a[i].pbc('/');
+			g[i].resize(x);
+			for (int j = 0; j < x; ++j) cin >> g[i][j];
+		}
+	}
+	queue<int> q;
+	q.push(1);
+	d[1] = 0;
+	while (q.size())
+	{
+		int v = q.front();
+		q.pop();
+		for (int i : g[v])
+		{
+			if (d[i] > d[v] + a[i].size())
+			{
+				d[i] = d[v] + a[i].size();
+				q.push(i);
+			}
+		}
+	}
+	for (int i = 1; i <= n; ++i) if(leave[i])ansfs += d[i];
+	dfssz(1, 1);
+	dfsord(1, 1, ansfs);
+	cout << ansfs;
+	//sp;
+}
