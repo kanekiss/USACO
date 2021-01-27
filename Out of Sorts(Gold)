@@ -1,0 +1,172 @@
+// ﻿#pragma GCC optimize("sse,sse2,sse3,ssse3,sse4,sse4.1,sse4.2,abm,mmx,avx,avx2,popcnt,tune=native")
+// #define _CRT_SECURE_NO_WARNINGS
+//#include <chrono>
+#include <set>
+#include <map>
+#include <deque>
+#include <string>
+#include <cstdint>
+#include <cmath>
+#include <queue>
+#include <cassert>
+#include <random>
+#include <bitset>
+#include <iomanip>
+#include <numeric>
+#include <time.h>//////////////
+#include <ctime>
+#include <climits>
+#include <string>
+#include <cstdio>
+#include <vector>
+#include <cstdlib>
+#include <iostream>
+#include <algorithm>
+#include <unordered_map>
+#include <chrono>
+#include <unordered_set>
+//++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++
+//#define endl '\n'
+#define mp make_pair
+#define pbc push_back
+#define pob pop_back()
+#define empb emplace_back
+#define queuel queue<long long>
+#define sqr(a) ((a) * (a))
+#define lsqr(a) (ld(a) * a)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define pin(p) cin >> p.first >> p.second;
+#define uniq(a) sort(all(a));(a).resize(unique(all(a)) - a.begin());
+#define rev(v) reverse(v.begin(), v.end());
+#define sout(s, c) for (auto i : s) cout << i << c;
+#define pout(p) cout << p.first << " " << p.second;
+#define er(v, l, r) erase(v.begin() + l, v.begin() + r);
+#define vin(v) for (ll i = 0; i < v.size(); ++i) cin >> v[i];
+#define vout(v, c) for (int i = 0; i < v.size(); ++i) cout << v[i] << c;
+#define pushi(v, a) for (int i = 0; i < a.size(); ++i) v.push_back(a[i]);
+#define fastio() ios_base::sync_with_stdio(0); cout.tie(0); cin.tie(0); srand(time(NULL))
+#define dab(v) for(auto i:v)cout<<i<<' ';
+#define sp system("pause")
+#define left left228
+#define type type1337
+#define right right228
+//++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++
+using namespace std;
+//++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++
+typedef long long ll;
+typedef long double ld;
+typedef unsigned long long ull;
+//++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++
+const ld EPS = 1e-5;
+const ld EPS2 = 1e-12;
+const ld PI = acos(-1);
+int mod = (int)998244353;
+const int MOD7 = 1000000007;
+const int MOD9 = 1000000009;
+const int a228 = 18;
+const ll INF = 1e18;
+const int inf = 1e9;
+mt19937 rnd(std::chrono::steady_clock::now().time_since_epoch().count());
+const ll kekmod = 1791791791;
+const ll bestmod = 1148822869;
+const int MAXN = 1e5 + 1;
+int stupid(vector<int> a)
+{
+	bool ss = 0;
+	int cnt = 0;
+	while (!ss)
+	{
+		ss = 1;
+		++cnt;
+		for (int i = 0; i < a.size() - 1; ++i)
+		{
+			if (a[i + 1] < a[i]) swap(a[i + 1], a[i]);
+		}
+		for (int i = a.size() - 2; i >= 0; --i) if (a[i + 1] < a[i]) swap(a[i + 1], a[i]);
+		for (int i = 0; i < a.size() - 1; ++i) if (a[i] > a[i + 1]) ss = 0;
+	}
+	return cnt;
+}
+int solve(vector<int> a)
+{
+	int n = a.size();
+	vector<int> dp(n + 1, inf);
+	dp[0] = -inf;
+	int ans = 0;
+	/*for (int i : a)
+	{
+		int x = lower_bound(all(dp), i) - dp.begin();
+		ans = max(ans, x);
+		dp[x] = i;
+	}*/
+	dp.assign(n + 1, inf);
+	dp[0] = -inf;
+	rev(a);
+	for (int i : a)
+	{
+		int x = upper_bound(all(dp), i) - dp.begin();
+		ans = max(ans, x);
+		dp[x] = i;
+	}
+	ans /= 2;
+	ans = max(ans, 1);
+	return ans;
+}
+int tsum = 0;
+map<int, int> cnt;
+void add(int x, int y)
+{
+	cnt[x] += y;
+	if (cnt[x] > 0)tsum += y;
+	else if (cnt[x] == 0)
+	{
+		if (y < 0) tsum--;
+	}
+}
+int solve2(vector<int> a)
+{
+	int n = a.size();
+	auto ta = a;
+	sort(all(ta));
+	int ans = 0;
+	cnt.clear();
+	for (int i = 0; i < n; ++i)
+	{
+		add(ta[i], 1);
+		add(a[i], -1);
+		ans = max(ans,tsum);
+	}
+	return max(ans, 1);
+}
+signed main()
+{
+	fastio();
+	freopen("sort.in", "r", stdin);
+	freopen("sort.out", "w", stdout);
+	int n;
+	cin >> n;
+	vector<int> a(n);
+	vin(a);
+	cout << solve2(a);
+//	sp;
+	return 0;
+	for (int kekt = 0;; ++kekt)
+	{
+		int n = 15;
+		vector<int> a(n);
+		for (int j = 0; j < n; ++j) a[j] = rnd() % 105 + 1;
+		int xx = solve2(a);
+		int yy = stupid(a);
+		if (xx != yy)
+		{
+			cout << xx << ' ' << yy << endl;
+			cout << n << endl;
+			vout(a, ' ');
+			cout << endl;
+			sp;
+		}
+		cout << kekt << endl;
+	}
+//	sp;
+}
