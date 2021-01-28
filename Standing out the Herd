@@ -1,0 +1,332 @@
+// ﻿#pragma GCC optimize("sse,sse2,sse3,ssse3,sse4,sse4.1,sse4.2,abm,mmx,avx,avx2,popcnt,tune=native")
+// #define _CRT_SECURE_NO_WARNINGS
+//#include <chrono>
+#include <set>
+#include <map>
+#include <deque>
+#include <string>
+#include <cstdint>
+#include <cmath>
+#include <queue>
+#include <cassert>
+#include <random>
+#include <bitset>
+#include <iomanip>
+#include <numeric>
+#include <time.h>//////////////
+#include <ctime>
+#include <climits>
+#include <string>
+#include <cstdio>
+#include <vector>
+#include <cstdlib>
+#include <iostream>
+#include <algorithm>
+#include <unordered_map>
+#include <chrono>
+#include <unordered_set>
+//++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++
+//#define endl '\n'
+#define mp make_pair
+#define pbc push_back
+#define pob pop_back()
+#define empb emplace_back
+#define queuel queue<long long>
+#define sqr(a) ((a) * (a))
+#define lsqr(a) (ld(a) * a)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define pin(p) cin >> p.first >> p.second;
+#define uniq(a) sort(all(a));(a).resize(unique(all(a)) - a.begin());
+#define rev(v) reverse(v.begin(), v.end());
+#define sout(s, c) for (auto i : s) cout << i << c;
+#define pout(p) cout << p.first << " " << p.second;
+#define er(v, l, r) erase(v.begin() + l, v.begin() + r);
+#define vin(v) for (ll i = 0; i < v.size(); ++i) cin >> v[i];
+#define vout(v, c) for (int i = 0; i < v.size(); ++i) cout << v[i] << c;
+#define pushi(v, a) for (int i = 0; i < a.size(); ++i) v.push_back(a[i]);
+#define fastio() ios_base::sync_with_stdio(0); cout.tie(0); cin.tie(0); srand(time(NULL))
+#define dab(v) for(auto i:v)cout<<i<<' ';
+#define sp system("pause")
+#define left left228
+#define type type1337
+#define right right228
+//++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++
+using namespace std;
+//++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++
+typedef long long ll;
+typedef long double ld;
+typedef unsigned long long ull;
+//++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++--++
+const ld EPS = 1e-5;
+const ld EPS2 = 1e-12;
+const ld PI = acos(-1);
+int mod = (int)998244353;
+const int MOD7 = 1000000007;
+const int MOD9 = 1000000009;
+const int a228 = 18;
+const ll INF = 1e18;
+const int inf = 1e9;
+mt19937 rnd(std::chrono::steady_clock::now().time_since_epoch().count());
+const ll kekmod = 1791791791;
+const ll bestmod = 1148822869;
+const int MAXN = 2e5 + 228;
+int p[MAXN];
+int pn[MAXN];
+int cnt[MAXN];
+int c[MAXN];
+int lc[MAXN];
+int szs[MAXN];
+const int lgg = 18;
+int spt[MAXN][lgg];
+void buildtable(vector<int> a)
+{
+	for (int i = 0; i < a.size(); ++i) spt[i][0] = a[i];
+	for (int h = 1; (1 << h) <= a.size(); ++h)
+	{
+		for (int i = 0; i  + (1<<h) -1< a.size(); ++i)
+		{
+			spt[i][h] = min(spt[i][h - 1], spt[i + (1 << (h - 1))][h - 1]);
+		}
+	}
+	for (int i = 2; i < MAXN; ++i)
+	{
+		szs[i] = szs[i >> 1] + 1;
+	}
+}
+int get(int l, int r)
+{
+	int xx = szs[r - l];
+	return min(spt[l][xx], spt[r - (1 << xx)][xx]);
+}int pos[MAXN];
+void buildlcp(string s)
+{
+	for (int i = 0; i < s.size(); ++i)
+	{
+		pos[p[i]] = i;
+	}
+	int n = s.size();
+	int k = 0;
+	for (int i = 0; i < n; ++i)
+	{
+		k = max(0, k - 1);
+		if (pos[i] == n - 1)
+		{
+			lc[n-1] = -1, k = 0;
+			continue;
+		}
+		else
+		{
+			int xx = p[pos[i] + 1];
+			while (i + k < n && xx + k < n && s[i + k] == s[xx + k]) ++k;
+			lc[pos[i]] = k;
+		}
+	}
+	vector<int> tx(n - 1);
+
+	for (int i = 0; i < n - 1; ++i) tx[i] = lc[i];
+//	vout(tx, ' ');
+//	cout << endl;
+//	cout << s << endl;
+	buildtable(tx);
+}
+int cn[MAXN];
+void build(string s)
+{
+	int  n = s.size();
+	fill(cnt, cnt + s.size() + 128, 0); fill(p, p + s.size(), 0); fill(c, c + s.size(), 0);
+	for (auto i : s) cnt[i]++;
+	for (int i = 1; i < 128; ++i) cnt[i] += cnt[i - 1];
+	for (int i = 0; i < n; ++i)
+	{
+		p[--cnt[s[i]]] = i;
+	}
+	int cl = 0;
+	c[p[0]] = 0;
+	for (int i = 1; i < s.size(); ++i)
+	{
+		if (s[p[i]] != s[p[i - 1]]) cl++;
+		c[p[i]] = cl;
+	}
+	for (int h = 0; (1 << h) < n; ++h)
+	{
+		fill(pn, pn + MAXN, 0);
+		fill(cn, cn + MAXN, 0);
+		fill(cnt, cnt + MAXN, 0);
+		for (int i = 0; i < n; ++i)
+		{
+			pn[i] = p[i] - (1 << h);
+			if (pn[i] < 0) pn[i] += n;
+		}
+		for (int i = 0; i < n; ++i)++cnt[c[i]];
+		for (int i = 1; i < n + 128; ++i) cnt[i] += cnt[i - 1];
+		for (int i = n - 1; i >= 0; --i)
+		{
+			p[--cnt[c[pn[i]]]] = pn[i];
+		}
+		cn[p[0]] = 0;
+
+		int cl = 0;
+		for (int i = 1; i < n; ++i)
+		{
+			int m1 = (p[i] + (1 << h)) % n, m2 = (p[i - 1] + (1 << h)) % n;
+			if (c[p[i]] != c[p[i - 1]] || c[m1] != c[m2]) ++cl;
+			cn[p[i]] = cl;
+		}
+		for (int i = 0; i < n; ++i) c[i] = cn[i];
+	}
+	buildlcp(s);
+}
+string t;
+int lcp(int i, int j)
+{
+	int xx = pos[i], yy = pos[j];
+	if (xx > yy)swap(xx, yy);
+	return get(xx,yy);
+/*s	for (int len = 1;; ++len)
+	{
+		if (j + len - 1 >= t.size() || i + len - 1 >= t.size()) return len - 1;
+		if (t[i + len - 1] != t[j + len - 1]) return len - 1;
+	}*/
+}
+vector<int> stupid(vector<string> a)
+{
+	vector<int> ans(a.size());
+	for (int i = 0; i < a.size(); ++i)
+	{
+		set<string> s;
+		for (int j = 0; j < a[i].size(); ++j)
+		{
+			for (int k = j; k < a[i].size(); ++k) s.insert(string(a[i].begin() + j, a[i].begin() + k + 1));
+		}
+		for (auto ia : s)
+		{
+			bool f = 1;
+			for (int ii = 0; ii < a.size(); ++ii)
+			{
+				if (i == ii) continue;
+				for (int j = 0; j < a[ii].size(); ++j)
+				{
+					for (int k = j; k < a[ii].size(); ++k)
+					{
+						if (string(a[ii].begin() + j, a[ii].begin() + k + 1) == ia) f = 0;
+					}
+				}
+			}
+			ans[i] += f;
+		}
+	}
+	return ans;
+}
+vector<int> solve(vector<string> a)
+{
+	int n = a.size();
+	t = "";
+	vector<int> names(MAXN);
+	vector<int> ids(MAXN);
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = t.size(); j <= t.size() + a[i].size(); ++j) names[j] = i, ids[j] = j - t.size();
+		t += a[i];
+		t += "#";
+	}
+	//vout(names, ' ');
+	//cout << endl;
+	//cout << t << endl;
+	build(t);
+	for (int i = 0; i < t.size(); ++i)
+	{
+		int x = p[i];
+	//	cout << string(t.begin() + x, t.end()) << endl;
+	}
+	vector<int> ans(n);
+	vector<int> llst(n);
+	for (int i = 0; i < t.size(); ++i)
+	{
+		//	if (t[i] == '#')continue;
+		llst[names[p[i]]] = p[i];
+	}
+	vector<pair<int, int>> st;
+	vector<int> rgt(t.size(), inf);
+	vector<int> lft(t.size(), -inf);
+	for (int i = 0; i < t.size(); ++i)
+	{
+		while (st.size() && st.back().first < names[p[i]])
+		{
+			rgt[st.back().second] = i;
+			st.pob;
+		}
+		st.pbc({ names[p[i]], i });
+	}
+	st.clear();
+	for (int i = 0; i < t.size(); ++i)
+	{
+		while (st.size() && st.back().first > names[p[i]])
+		{
+			rgt[st.back().second] = min(rgt[st.back().second], i);
+			st.pob;
+		}
+		st.pbc({ names[p[i]], i });
+	}
+	st.clear();
+	for (int i = t.size() - 1; i >= 0; --i)
+	{
+		while (st.size() && st.back().first < names[p[i]])
+		{
+			lft[st.back().second] = i;
+			st.pob;
+		}
+		st.pbc({ names[p[i]], i });
+	}
+	st.clear();
+	for (int i = t.size() - 1; i >= 0; --i)
+	{
+		while (st.size() && st.back().first > names[p[i]])
+		{
+			lft[st.back().second] = max(lft[st.back().second], i);
+			st.pob;
+		}
+		st.pbc({ names[p[i]], i });
+	}
+	for (int i = 0; i < t.size(); ++i)
+	{
+		if (t[p[i]] == '#')continue;
+		if (names[p[i]] == 1)
+		{
+			cout << "";
+		}
+		int nw = p[i];
+		int kek = 0;
+		int fs = lft[i];
+		if (fs != -inf)
+		{
+			kek = max(kek, lcp(p[i], p[fs]));
+		}
+		if (names[p[i - 1]] == names[nw])
+		{
+			kek = max(kek, lcp(p[i - 1], nw));
+		}
+		fs = rgt[i];
+		if (fs != inf)
+		{
+			kek = max(kek, lcp(p[i], p[fs]));
+		}
+		kek = min(kek, (int)a[names[nw]].size() - ids[nw]);
+		ans[names[nw]] += a[names[nw]].size() - kek - ids[nw];
+	}
+	return ans;
+}
+signed main()
+{
+	fastio();
+	freopen("standingout.in", "r", stdin);
+	freopen("standingout.out", "w", stdout);
+	int n;
+	cin >> n;
+	t = "";
+	vector<string> a(n);
+	vin(a);
+	auto tx = solve(a);
+	vout(tx, '\n');
+	//sp;
+}
